@@ -65,19 +65,21 @@ func MembershipsLists(client *http.Client, argv []string) {
 		log.Fatalf("Unable to retrieve membership list: %v", err)
 	}
 
-	var membersSubscriptionsImported = make(map[string]MembershipSubscription)
+	var membersSubscriptionsImported []*MembershipSubscription
 
 	for _, membership := range memberships.Items {
 		membershipSnippet := membership.Snippet
-
-		membersSubscriptionsImported[membershipSnippet.MemberDetails.DisplayName] = MembershipSubscription{
+		
+		memberDetails := &MembershipSubscription{
 			DisplayName: membershipSnippet.MemberDetails.DisplayName,
 			ProfileImageUrl: membershipSnippet.MemberDetails.ProfileImageUrl,
 			ChannelUrl: membershipSnippet.MemberDetails.ChannelUrl,
 			HighestAccessibleLevelDisplayName: membershipSnippet.MembershipsDetails.HighestAccessibleLevelDisplayName,
 			MemberSince: membershipSnippet.MembershipsDetails.MembershipsDuration.MemberSince,
 			MemberTotalDurationMonths: membershipSnippet.MembershipsDetails.MembershipsDuration.MemberTotalDurationMonths,
-		}	
+		}
+
+		membersSubscriptionsImported = append(membersSubscriptionsImported, memberDetails)
 	}
 
 	membershipsListFile, err := os.OpenFile("memberships-list.csv", os.O_RDWR|os.O_CREATE, os.ModePerm)
@@ -88,7 +90,7 @@ func MembershipsLists(client *http.Client, argv []string) {
 	
 	defer membershipsListFile.Close()
 
-	err = gocsv.MarshalFile(membersSubscriptionsImported, membershipsListFile)
+	err = gocsv.MarshalFile(&membersSubscriptionsImported, membershipsListFile)
 
 	if err != nil {
 		panic(err)
