@@ -16,10 +16,10 @@ After build, you can run the command:
 
 > `channelId` to filter the members by channelId - Channels that you have access.                           
 
-After you execute the command, an authorization tab will open in your default browser. This page is from Google and is for authorization, you must login with the account that has access to <channelId>. 
+After you execute the command, an authorization tab will open in your default browser. This page is from Google and is for authorization, you must login with the account that has access to channelId. 
 
 After authorizing, Google will redirect the tab to a `localhost` domain, so that the script can obtain the authentication token, all of this is done automatically.
 
 This token will be saved in a file inside the folder, so that subsequent uses do not need authorization again.
 
-The command will generate a .csv file containing up to 1000 members, each member will export member and subscription information.
+The command will generate a .csv file containing up to 1000 members, it will export Member Details (Name) and Subscription information (Period, level & etc).
